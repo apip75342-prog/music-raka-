@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Penjaga Hati</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+    color: white;
+
+    background:
+        radial-gradient(circle at 20% 20%, #5b21b6, transparent 35%),
+        radial-gradient(circle at 80% 80%, #075985, transparent 35%),
+        #050509;
+
+    overflow: hidden;
+}
+
+/* background */
+.bg {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .5;
+    animation: gerak 7s infinite alternate;
+}
+
+.bg1 {
+    background: #7c3aed;
+    top: -100px;
+    left: -100px;
+}
+
+.bg2 {
+    background: #0891b2;
+    right: -100px;
+    bottom: -100px;
+    animation-delay: 2s;
+}
+
+@keyframes gerak {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(60px, -40px);
+    }
+}
+
+/* player */
+.player {
+    position: relative;
+    z-index: 2;
+
+    width: 92%;
+    max-width: 390px;
+
+    padding: 25px;
+
+    border-radius: 30px;
+
+    background: rgba(255,255,255,.09);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.5);
+}
+
+/* header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 20px;
+}
+
+.header span {
+    font-size: 22px;
+}
+
+/* cover */
+.cover {
+    width: 230px;
+    height: 230px;
+
+    margin: 10px auto 25px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #0891b2
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 80px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.45);
+
+    animation: mengambang 4s infinite ease-in-out;
+}
+
+@keyframes mengambang {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* info */
+.info {
+    text-align: center;
+}
+
+.info h1 {
+    font-size: 25px;
+}
+
+.info p {
+    margin-top: 7px;
+    color: #aaa;
+}
+
+/* progress */
+.progress-area {
+    margin-top: 25px;
+}
+
+.progress {
+    width: 100%;
+    height: 6px;
+
+    background: rgba(255,255,255,.2);
+
+    border-radius: 20px;
+
+    cursor: pointer;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+
+    background: white;
+
+    border-radius: 20px;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 7px;
+
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 25px;
+
+    margin-top: 25px;
+}
+
+.controls button {
+    border: none;
+    background: transparent;
+
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+.play {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background: white !important;
+
+    color: black !important;
+
+    font-size: 25px !important;
+}
+
+/* volume */
+.volume {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.volume input {
+    width: 100%;
+}
+
+/* status */
+.status {
+    text-align: center;
+
+    margin-top: 18px;
+
+    color: #aaa;
+
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+
+<div class="player">
+
+    <div class="header">
+        <h2>🎵 Raka Music</h2>
+        <span>♡</span>
+    </div>
+
+    <div class="cover">
+        🎵
+    </div>
+
+    <div class="info">
+        <h1>Penjaga Hati</h1>
+        <p>Music Player</p>
+    </div>
+
+    <div class="progress-area">
+
+        <div class="progress" id="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="time">
+            <span id="current">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+    </div>
+
+    <div class="controls">
+
+        <button onclick="mundur()">
+            ⏮
+        </button>
+
+        <button
+            class="play"
+            id="playButton"
+            onclick="putar()">
+            ▶
+        </button>
+
+        <button onclick="maju()">
+            ⏭
+        </button>
+
+    </div>
+
+    <div class="volume">
+
+        <span>🔊</span>
+
+        <input
+            type="range"
+            id="volume"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1">
+
+    </div>
+
+    <div class="status" id="status">
+        Siap diputar 🎧
+    </div>
+
+</div>
+
+
+<!--
+    FILE LAGU
+    Harus sama dengan nama file MP3
+-->
+<audio
+    id="audio"
+    src="AllVideo_01790600797129.mp3">
+</audio>
+
+
+<script>
+
+/* mengambil elemen */
+
+const audio =
+    document.getElementById("audio");
+
+const playButton =
+    document.getElementById("playButton");
+
+const progress =
+    document.getElementById("progress");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const current =
+    document.getElementById("current");
+
+const duration =
+    document.getElementById("duration");
+
+const volume =
+    document.getElementById("volume");
+
+const status =
+    document.getElementById("status");
+
+
+/* play / pause */
+
+function putar() {
+
+    if (audio.paused) {
+
+        audio.play();
+
+        playButton.textContent = "⏸";
+
+        status.textContent =
+            "Sedang diputar 🎵";
+
+    } else {
+
+        audio.pause();
+
+        playButton.textContent = "▶";
+
+        status.textContent =
+            "Dijeda ⏸";
+
+    }
+
+}
+
+
+/* mundur 10 detik */
+
+function mundur() {
+
+    audio.currentTime -= 10;
+
+}
+
+
+/* maju 10 detik */
+
+function maju() {
+
+    audio.currentTime += 10;
+
+}
+
+
+/* update progress */
+
+audio.addEventListener(
+    "timeupdate",
+    function() {
+
+        if (!audio.duration) return;
+
+        let persen =
+            (audio.currentTime /
+            audio.duration) * 100;
+
+        progressBar.style.width =
+            persen + "%";
+
+        current.textContent =
+            waktu(audio.currentTime);
+
+    }
+);
+
+
+/* durasi lagu */
+
+audio.addEventListener(
+    "loadedmetadata",
+    function() {
+
+        duration.textContent =
+            waktu(audio.duration);
+
+    }
+);
+
+
+/* format waktu */
+
+function waktu(detik) {
+
+    if (isNaN(detik)) {
+        return "0:00";
+    }
+
+    let menit =
+        Math.floor(detik / 60);
+
+    let detik2 =
+        Math.floor(detik % 60);
+
+    if (detik2 < 10) {
+        detik2 = "0" + detik2;
+    }
+
+    return menit + ":" + detik2;
+}
+
+
+/* klik progress */
+
+progress.addEventListener(
+    "click",
+    function(e) {
+
+        if (!audio.duration) return;
+
+        let lebar =
+            progress.clientWidth;
+
+        let posisi =
+            e.offsetX;
+
+        audio.currentTime =
+            (posisi / lebar)
+            * audio.duration;
+
+    }
+);
+
+
+/* volume */
+
+volume.addEventListener(
+    "input",
+    function() {
+
+        audio.volume =
+            volume.value;
+
+    }
+);
+
+
+/* lagu selesai */
+
+audio.addEventListener(
+    "ended",
+    function() {
+
+        playButton.textContent = "▶";
+
+        status.textContent =
+            "Lagu selesai 🎵";
+
+        progressBar.style.width =
+            "0%";
+
+    }
+);
+
+</script>
+
+</body>
+  </html>
